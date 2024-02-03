@@ -2,7 +2,7 @@
 
 Step by step instructions on starting to send streaming data to Data Taps with processed data output to your S3 Bucket.
 
-You will create an IAM Role into your AWS Account and connect Data Taps to your S3 Bucket, so that when you HTTP POST newlined delimited JSON data to the Tap URL, the data ends up into your S3 Bucket with nicely named and partitioned.
+You will create an IAM Role into your AWS Account and connect Data Taps to your S3 Bucket, so that when you HTTP POST newlined delimited JSON data to the Tap URL, the data ends up into your S3 Bucket nicely named and partitioned.
 
 > You can see more detailed instructions [here](https://github.com/boilingdata/boilingdata-bdcli/blob/main/ONBOARDING.md).
 
