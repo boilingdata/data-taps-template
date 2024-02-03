@@ -1,0 +1,33 @@
+version: 1.0
+id: test
+environment: dev
+region: eu-west-1
+
+resources:
+
+  storage:
+    name: demo-role
+    permissions:
+      - urlPrefix: s3://isecurefi-dev-test/tmp/
+        accessRights: [ write ]
+
+  taps:
+    - name: demo-tap
+      models:
+        - name: test
+          format: ndjson
+          model: [fileSize, lastSyncDiffMs, totalStreamRespTimeMs, __bd_ts, __bd_model, __bd_bytes, __bd_count, __bd_version]
+
+  pipes:
+    - name: test
+      input: "tap://demo-tap/test?tumblingWindowS=60"
+      output: "s3://isecurefi-dev-test/tmp/{__bd_model_name}/year=%Y/month=%m/day=%d/hour=%H/%Y-%m-%d_%H_%M_%S_%L_{__bd_rand}__querylog.parquet?compression=zstd"
+      transformSql: "SELECT SUM(fileSize) AS sumFileSize, AVG(totalStreamRespTimeMs) AS avgRespTimeMs, COUNT(*) AS count  FROM stream"
+
+  acls:
+    - name: input_tap
+      target: tap://demo-tap
+      users: [dforsber+datataps@gmail.com]
+
+
+
