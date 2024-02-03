@@ -6,7 +6,7 @@ You will create an IAM Role into your AWS Account and connect Data Taps to your 
 
 > You can see more detailed instructions [here](https://github.com/boilingdata/boilingdata-bdcli/blob/main/ONBOARDING.md).
 
-## 1. Create account with your email
+## 1. Create Boiling account with your email
 
 ```shell
 yarn install
@@ -16,7 +16,7 @@ bdcli account register
 bdcli account register --confirm <codeFromEmail>
 ```
 
-## 2. Connect your account with your S3 Bucket
+## 2. Connect your Boiling account with your S3 Bucket
 
 Open the example IaC template [data-taps-iac.yaml](data-taps-iac.yaml) and update the following:
 
@@ -48,3 +48,7 @@ The tumbling window in the example template is 1 minute. After couple of minutes
 ```shell
 aws s3 ls --recursive s3://YOURBUCKET/PREFIX
 ```
+
+## 5. You can now also use Boiling Data to query your S3 Data
+
+You can `SUBSCRIBE` live to your Data Taps with `SQL` if you like, or query your data from S3. For more information, check out [https://www.boilingdata.com/](https://www.boilingdata.com).
