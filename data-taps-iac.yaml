@@ -8,7 +8,7 @@ resources:
   storage:
     name: demo-role
     permissions:
-      - urlPrefix: s3://isecurefi-dev-test/tmp/
+      - urlPrefix: s3://YOURBUCKET/PREFIX/
         accessRights: [ write ]
 
   taps:
@@ -21,13 +21,10 @@ resources:
   pipes:
     - name: test
       input: "tap://demo-tap/test?tumblingWindowS=60"
-      output: "s3://isecurefi-dev-test/tmp/{__bd_model_name}/year=%Y/month=%m/day=%d/hour=%H/%Y-%m-%d_%H_%M_%S_%L_{__bd_rand}__querylog.parquet?compression=zstd"
+      output: "s3://YOURBUCKET/PREFIX/{__bd_model_name}/year=%Y/month=%m/day=%d/hour=%H/%Y-%m-%d_%H_%M_%S_%L_{__bd_rand}__querylog.parquet?compression=zstd"
       transformSql: "SELECT SUM(fileSize) AS sumFileSize, AVG(totalStreamRespTimeMs) AS avgRespTimeMs, COUNT(*) AS count  FROM stream"
 
-  acls:
+  shares:
     - name: input_tap
       target: tap://demo-tap
-      users: [dforsber+datataps@gmail.com]
-
-
-
+      users: [ YOUREMAIL ]
