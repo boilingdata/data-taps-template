@@ -21,8 +21,8 @@ resources:
   pipes:
     - name: test
       input: "tap://demo-tap/test?tumblingWindowS=60"
-      output: "s3://YOURBUCKET/PREFIX/{__bd_model_name}/year=%Y/month=%m/day=%d/hour=%H/%Y-%m-%d_%H_%M_%S_%L_{__bd_rand}__querylog.parquet?compression=zstd"
-      transformSql: "SELECT SUM(fileSize) AS sumFileSize, AVG(totalStreamRespTimeMs) AS avgRespTimeMs, COUNT(*) AS count  FROM stream"
+      output: "s3://YOURBUCKET/PREFIX/{__bd_model_name}/year=%Y/month=%m/day=%d/hour=%H/%Y-%m-%d_%H_%M_%S_%L_test.parquet?compression=zstd"
+      transformSql: "SELECT SUM(fileSize) AS sumFileSize, AVG(totalStreamRespTimeMs) AS avgRespTimeMs, COUNT(*) AS count FROM stream"
 
   shares:
     - name: input_tap
