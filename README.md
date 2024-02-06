@@ -10,10 +10,10 @@ You will create an IAM Role into your AWS Account and connect Data Taps to your 
 
 ```shell
 yarn install
-bdcli account config
-bdcli account register
+npx bdcli account config
+npx bdcli account register
 # Check your email for verification code
-bdcli account register --confirm <codeFromEmail>
+npx bdcli account register --confirm <codeFromEmail>
 ```
 
 ## 2. Connect your Boiling account with your S3 Bucket
