@@ -49,6 +49,8 @@ The tumbling window in the example template is 1 minute. After couple of minutes
 aws s3 ls --recursive s3://YOURBUCKET/PREFIX
 ```
 
-## 5. You can now also use Boiling Data to query your S3 Data
+## 5. You can also use Boiling Data to query your S3 Data at rest or run Streaming SQL
 
-You can `SUBSCRIBE` live to your Data Taps with `SQL` if you like, or query your data from S3. For more information, check out [https://www.boilingdata.com/](https://www.boilingdata.com).
+You can `SUBSCRIBE` live to your Data Taps with `SQL` if you like, or query your data from S3. 
+
+For more information, check out [https://www.boilingdata.com/](https://www.boilingdata.com).
