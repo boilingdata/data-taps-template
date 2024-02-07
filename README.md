@@ -6,6 +6,8 @@ You will create an IAM Role into your AWS Account and connect Data Taps to your 
 
 > You can see more detailed instructions [here](https://github.com/boilingdata/boilingdata-bdcli/blob/main/ONBOARDING.md).
 
+> NOTE! Data Taps is deployed to the following AWS Regions: `eu-west-1`, `eu-north-1`, and `us-west-2`. You can deploy to any of these regions by changing the template `region:` key. However, your data output S3 Bucket must reside on the same AWS Region.
+
 ## 1. Create Boiling account with your email
 
 ```shell
