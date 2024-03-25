@@ -10,8 +10,7 @@ When thresholds are reached, DuckDB is used to stream process the newline delimi
 COPY (
     SELECT CAST(filename[17:27] AS INT32) AS __bd_ts, * EXCLUDE(filename)
       FROM read_json_auto('/tmp/json_files/*.json', ignore_errors=true, auto_detect=true, format=newline_delimited, filename=true, maximum_depth=2, union_by_name=true)
-)
-TO '%s' WITH ( FORMAT 'Parquet', COMPRESSION 'ZSTD' )
+) TO '%s' WITH ( FORMAT 'Parquet', COMPRESSION 'ZSTD' )
 ```
 
 The output filename is a `strftime()` path on S3 to get hive partitioned output by `year`/`month`/`day`/`hour`.
