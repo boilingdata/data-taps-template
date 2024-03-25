@@ -41,7 +41,7 @@ You will create an IAM Role into your AWS Account and connect Data Taps to your 
 yarn install
 npx bdcli account config
 npx bdcli account register
-# Check your email for verification code
+# Check your incoming email with subject "BoilingData Email Verification"
 npx bdcli account register --confirm <codeFromEmail>
 ```
 
