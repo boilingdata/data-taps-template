@@ -23,6 +23,6 @@
     "test:loop:busy": "source .taptoken && source .tapurl && while :; do ( curl -w \"@curl-format.txt\" -H \"Content-Type:application/x-ndjson\" -H \"x-bd-authorization: ${TAP_TOKEN}\" -s --data-binary @data.json ${TAP_URL} & ) ; sleep 0.05 ; done"
   },
   "dependencies": {
-    "@boilingdata/boilingdata-bdcli": "^1.0.34"
+    "@boilingdata/boilingdata-bdcli": "^1.1.1"
   }
 }
