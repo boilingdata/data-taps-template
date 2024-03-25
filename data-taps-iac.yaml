@@ -13,10 +13,6 @@ resources:
 
   taps:
     - name: demo-tap
-      models:
-        - name: test
-          format: ndjson
-          model: [fileSize, lastSyncDiffMs, totalStreamRespTimeMs, __bd_ts, __bd_model, __bd_bytes, __bd_count, __bd_version]
 
   pipes:
     - name: test

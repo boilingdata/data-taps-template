@@ -1,4 +1,24 @@
-# Data Taps Getting Started
+# Data Taps
+
+## Tailor made C++ runtime, bootstrap, handler, and extension
+
+Data Taps are tailor made AWS Lambda functions with Function URL as the Tap ingestion point. Taps are made of custom C++ runtime and handler code with embedded DuckDB. They run efficiently with the smallest ARM64 Lambda (128MB) and provide unparalleled scalability, cost efficiency, and stable low latency. A Data Tap collects data into the Lambda by running atomic filesystem append commands and depending on the incoming data packet size completes below 2ms. When thresholds are reached, DuckDB is used to stream process the newline delimited JSON files into S3 as ZSTD compressed Parquet files.
+
+Like for an example, with no actual transformations but just data format conversion fron NDJSON to Parquet:
+
+```sql
+COPY (
+    SELECT CAST(filename[17:27] AS INT32) AS __bd_ts, * EXCLUDE(filename)
+      FROM read_json_auto('/tmp/json_files/*.json', ignore_errors=true, auto_detect=true, format=newline_delimited, filename=true, maximum_depth=2, union_by_name=true)
+)
+TO '%s' WITH ( FORMAT 'Parquet', COMPRESSION 'ZSTD' )
+```
+
+The output filename is a `strftime()` path on S3 to get hive partitioned output by `year/month/day/hour`.
+
+> NOTE: An accompanying AWS Lambda extension is used to hook into the AWS Lambda lifecycle events to flush remaining data when AWS Lambda shuts down.
+
+## Getting Started
 
 Step by step instructions on starting to send streaming data to Data Taps with processed data output to your S3 Bucket.
 
@@ -6,7 +26,7 @@ You will create an IAM Role into your AWS Account and connect Data Taps to your 
 
 > You can see more detailed instructions [here](https://github.com/boilingdata/boilingdata-bdcli/blob/main/ONBOARDING.md).
 
-> NOTE! Data Taps is deployed to the following AWS Regions: `eu-west-1`, `eu-north-1`, and `us-west-2`. You can deploy to any of these regions by changing the template `region:` key. However, your data output S3 Bucket must reside on the same AWS Region.
+> NOTE! Data Taps is deployed to the following AWS Regions: `eu-west-1`, `eu-north-1`, `us-west-2`, and `us-east-2`. You can deploy to any of these regions by changing the template `region:` key. However, your data output S3 Bucket must reside on the same AWS Region.
 
 ## 1. Create Boiling account with your email
 
@@ -53,6 +73,6 @@ aws s3 ls --recursive s3://YOURBUCKET/PREFIX
 
 ## 5. You can also use Boiling Data to query your S3 Data at rest or run Streaming SQL
 
-You can `SUBSCRIBE` live to your Data Taps with `SQL` if you like, or query your data from S3. 
+You can `SUBSCRIBE` live to your Data Taps with `SQL` if you like, or query your data from S3.
 
 For more information, check out [https://www.boilingdata.com/](https://www.boilingdata.com).
