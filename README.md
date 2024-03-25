@@ -4,7 +4,7 @@
 
 Data Taps are tailor made AWS Lambda functions with Function URL as the Tap ingestion point. Taps are made of custom C++ runtime and handler code with embedded DuckDB. They run efficiently with the smallest ARM64 Lambda (128MB) and provide unparalleled scalability, cost efficiency, and stable low latency. A Data Tap collects data into the Lambda by running atomic filesystem append commands and depending on the incoming data packet size completes even below `2ms`. Accruing and buffering the data does not require processing power, except for verifying the JWT token for authentication and access control purposes.
 
-When thresholds are reached, DuckDB is used to stream process the newline delimited JSON files into S3 as ZSTD compressed Parquet files. This is where the data processing and when data upload happens. A single SQL statement is used to process the data. Like for an example below, with no actual transformations but just data format conversion fron NDJSON to Parquet:
+When thresholds are reached, DuckDB is used to stream process the newline delimited JSON files into S3 as ZSTD compressed Parquet files. This is where the data processing and when data upload happens. A single SQL statement is used to process the data. Like for an example below, with no actual transformations but just data format conversion from NDJSON to Parquet. This network upload is also the most time consuming part with small AWS Lambda functions and dominating factor when calculating costs. There are ways to optimise this part.
 
 ```sql
 COPY (
@@ -14,7 +14,7 @@ COPY (
 TO '%s' WITH ( FORMAT 'Parquet', COMPRESSION 'ZSTD' )
 ```
 
-The output filename is a `strftime()` path on S3 to get hive partitioned output by `year/month/day/hour`.
+The output filename is a `strftime()` path on S3 to get hive partitioned output by `year`/`month`/`day`/`hour`.
 
 > NOTE: An accompanying AWS Lambda extension is used to hook into the AWS Lambda lifecycle events to flush remaining data when AWS Lambda shuts down.
 
