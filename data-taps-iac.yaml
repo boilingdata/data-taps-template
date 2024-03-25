@@ -16,7 +16,7 @@ resources:
 
   pipes:
     - name: test
-      input: "tap://demo-tap/test?tumblingWindowS=60"
+      input: "tap://demo-tap/default?tumblingWindowS=60"
       output: "s3://YOURBUCKET/PREFIX/{__bd_model_name}/year=%Y/month=%m/day=%d/hour=%H/%Y-%m-%d_%H_%M_%S_%L_test.parquet"
 
   shares:
