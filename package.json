@@ -16,13 +16,13 @@
     "deploy": "bdcli sandbox deploy --name dev__euw1__test",
     "destroy": "bdcli sandbox destroy --name dev__euw1__test",
     "destroy:really": "bdcli sandbox destroy --destroy-also-interfaces --name dev__euw1__test",
-    "taptoken": "( printf \"export TAP_TOKEN=\" && bdcli account tap-token --lifetime 24h --disable-spinner | jq -r .bdTapToken ) > .taptoken",
+    "taptoken": "( printf \"export TAP_TOKEN=\" && bdcli account tap-client-token --lifetime 24h --disable-spinner | jq -r .bdTapToken ) > .taptoken",
     "tapurl": "( printf \"export TAP_URL=\" && bdcli sandbox deploy --disable-spinner --name dev__euw1__test | jq -r '.[].outputs.url' | grep https ) > .tapurl",
     "test": "source .taptoken && source .tapurl && curl -v -w \"@curl-format.txt\" --no-keepalive -H \"Connection: close\" -H \"Content-Type:application/x-ndjson\" -H \"x-bd-authorization: ${TAP_TOKEN}\"  -s --data-binary @data.json ${TAP_URL}",
     "test:loop": "source .taptoken && source .tapurl && while :; do curl -w \"@curl-format.txt\" --no-keepalive -H \"Connection: close\" -H \"Content-Type:application/x-ndjson\" -H \"x-bd-authorization: ${TAP_TOKEN}\" -s --data-binary @data.json ${TAP_URL} ; sleep 0.5 ; done",
     "test:loop:busy": "source .taptoken && source .tapurl && while :; do ( curl -w \"@curl-format.txt\" -H \"Content-Type:application/x-ndjson\" -H \"x-bd-authorization: ${TAP_TOKEN}\" -s --data-binary @data.json ${TAP_URL} & ) ; sleep 0.05 ; done"
   },
   "dependencies": {
-    "@boilingdata/boilingdata-bdcli": "^1.1.1"
+    "@boilingdata/boilingdata-bdcli": "^1.1.2"
   }
 }
