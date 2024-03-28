@@ -1,5 +1,7 @@
 # Data Taps
 
+**NOTE**: Instead of using bdcli, you can deploy Data Tap with AWS SAM template on [aws_sam_template/](aws_sam_template/README.md).
+
 ## Tailor made C++ runtime, bootstrap, handler, and extension
 
 Data Taps are tailor made AWS Lambda functions with Function URL as the Tap ingestion point. Taps are made of custom C++ runtime and handler code with embedded DuckDB. They run efficiently with the smallest ARM64 Lambda (128MB) and provide unparalleled scalability, cost efficiency, and stable low latency. A Data Tap collects data into the Lambda by running atomic filesystem append commands and depending on the incoming data packet size completes even below `2ms`. Accruing and buffering the data does not require processing power, except for verifying the JWT token for authentication and access control purposes.
