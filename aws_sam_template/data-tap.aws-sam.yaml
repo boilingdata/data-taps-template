@@ -3,22 +3,6 @@ Transform: AWS::Serverless-2016-10-31
 Description: Data Tap template (BoilingData)
 
 Parameters:
-  zipCodeS3Bucket:
-    Type: String
-    Description: >-
-      Upload the data-tap.zip to S3 Bucket and provide the S3 Bucket
-  zipCodeS3Key:
-    Type: String
-    Description: >-
-      Upload the data-tap.zip to S3 Bucket and provide the full S3 Key
-  extensionS3Bucket:
-    Type: String
-    Description: >-
-      Location for the Data Tap AWS Lambda extension. This extension will register into the
-      AWS Lambda lifecycle hooks and be called once the Lambda container is shutting down.
-      Once called, it will flush remaining data to S3 by calling the main handler. You need to
-      upload the extension.zip into this S3 S3Bucket. Note that the S3 prefix is hard coded
-      below to "extension.zip".
   dataTapOutputS3Bucket:
     Type: String
     Description: >-
@@ -119,18 +103,14 @@ Resources:
   dataTapExtension:
     Type: AWS::Lambda::LayerVersion
     Properties:
-      Content:
-        S3Bucket: !Ref extensionS3Bucket
-        S3Key: extension.zip
+      Content: extension.zip
       LayerName: dataTapsExtension
 
   demoDataTap:
     Type: AWS::Serverless::Function
     Properties:
       PackageType: Zip
-      CodeUri:
-        Bucket: !Ref zipCodeS3Bucket
-        Key: !Ref zipCodeS3Key
+      CodeUri: data-tap.zip
       MemorySize: !Ref memorySize
       Timeout: 5
       Handler: bdtap
@@ -208,8 +188,16 @@ Resources:
       RuntimeManagementConfig:
         UpdateRuntimeOn: Auto
 
-# Outputs:
-#   dataTapURL:
-#     Description: >-
-#       The AWS Lambda Function URL for the demoDataTap. You can send your data into this URL.
-#     Value: !GetAtt demoDataTap.FunctionUrl
+Outputs:
+  dataTapURL:
+    Description: >-
+      The AWS Lambda Function URL for the demoDataTap. You can send your data into this URL.
+      As an example to send data.json with curl:
+        export TAP_URL="..."
+        export TAP_TOKEN="..."
+        curl --no-keepalive -H "Connection: close" \
+              -H "Content-Type:application/x-ndjson" \
+              -H "x-bd-authorization: ${TAP_TOKEN}" \
+              --data-binary @data.json \
+              ${TAP_URL}
+    Value: !GetAtt demoDataTapUrl.FunctionUrl

@@ -11,20 +11,15 @@ Replace correct values for the parameters below.
 **NOTE** Currently, if you make the Data Tap Lambda HA (in multiple AZs) and you use S3 Express (Directory) Bucket (resides in a single AZ), you may incur cross-AZ data transfer costs when the actual Data Tap Lambda is on another AZ.
 
 ```shell
-sam validate --lint --template-file data-tap.aws-sam.yaml
-
-sam deploy --guided --template-file data-tap.aws-sam.yaml \
-    --stack-name data-taps-demo \
-    --capabilities CAPABILITY_IAM \
-    --parameter-overrides \
-        zipCodeUri=uploadedDataTapZipS3Uri \
-        extensionS3Bucket=YourS3ExtensionBucket \
-        dataTapOutputS3Bucket=YourS3OutputBucket \
-        dataTapOutputS3BucketArn=YourS3OutputBucketArn \
-        bdTapTokenSecret=yourBdApiTapMasterSecret \
-        ownerBoilinDataEmail=yourBoilingDataAccountEmail \
-        sgId=yourVpcSgForTheDataTapLambda \
-        subnet1=yourAz1SubnetId \
-        subnet2=yourAz2SubnetId \
-        subnet3=yourAz3SubnetId
+sam validate
+sam package
+sam deploy --parameter-overrides \
+    dataTapOutputS3Bucket=YourS3OutputBucket \
+    dataTapOutputS3BucketArn=YourS3OutputBucketArn \
+    bdTapTokenSecret=yourBdApiTapMasterSecret \
+    ownerBoilinDataEmail=yourBoilingDataAccountEmail \
+    sgId=yourVpcSgForTheDataTapLambda \
+    subnet1=yourAz1SubnetId \
+    subnet2=yourAz2SubnetId \
+    subnet3=yourAz3SubnetId
 ```

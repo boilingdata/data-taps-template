@@ -1,0 +1,18 @@
+version = 0.1
+
+[default]
+[default.global]
+[default.global.parameters]
+template_file = "data-tap.aws-sam.yaml"
+stack_name = "demo-data-tap"
+
+[default.validate.parameters]
+lint = true
+
+[default.package.parameters]
+resolve_s3 = true
+
+[default.deploy.parameters]
+capabilities = "CAPABILITY_IAM"
+confirm_changeset = true
+resolve_s3 = true
