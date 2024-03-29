@@ -63,10 +63,23 @@ Parameters:
       documentation about Lambda Function URLs on how the concurrency limit affects maximum RPS etc.
       https://docs.aws.amazon.com/lambda/latest/dg/urls-configuration.html#urls-throttling
     Default: 10
+  memorySize:
+    Type: Number
+    Description: >-
+      AWS Lambda memory size. It direcly affects network throughput from the Tap to S3. More memory
+      mean higher network throughput but also more expensive compute time. This parameters is important
+      since it affects how much data a shutting down Lambda container can flush to S3. Doubling the 
+      memory makes it roughly twice faster at sending data to S3, thus having roughly the same cost,
+      at least on small Lambda memory levels.
+    Default: 128
   thresholdBytes:
     Type: Number
     Description: >-
-      Data Taps will flush data to S3 once the thresholds are reached.
+      Data Taps will flush data to S3 once the thresholds are reached. The bigger Lambda you have
+      the more you can buffer while ensuring that the 2000ms time to send the remaining data to S3 when
+      Lambda container is shutting down. Please note that DuckDB will convert the data to zstd compressed
+      Parquet which in size is many times smaller than the incoming newline delimited JSON. This aspect
+      makes Data Taps especially useful with tiniest AWS Lambda functions and thus very cost efficient.
     Default: 10485760
   thresholdMs:
     Type: Number
@@ -108,7 +121,7 @@ Resources:
       CodeUri:
         Bucket: !Ref zipCodeS3Bucket
         Key: !Ref zipCodeS3Key
-      MemorySize: 128
+      MemorySize: !Ref memorySize
       Timeout: 5
       Handler: bdtap
       Runtime: provided.al2023

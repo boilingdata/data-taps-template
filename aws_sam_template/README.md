@@ -1,6 +1,8 @@
 # Deploying using AWS SAM
 
-Please note that you still need your BoilingData account to fetch the Data Tap master secret that is needed as a parameter for this [SAM](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html#install-sam-cli-instructions) template.
+You need BoilingData account to get Tap Master secret as well as getting authentication token when sending data to the Tap. You can use [bdcli](https://github.com/boilingdata/boilingdata-bdcli) to register and manage your account as well as get tokens and run one-off SQL queries.
+
+The Data Tap master secret that is needed as a parameter for this [SAM](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html#install-sam-cli-instructions) template.
 
 Replace correct values for the parameters below.
 
