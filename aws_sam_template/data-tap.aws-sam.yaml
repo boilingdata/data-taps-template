@@ -23,7 +23,15 @@ Parameters:
     Type: String
     Description: >-
       The Data Taps output S3 Bucket name, not the ARN. The S3 Express Bucket ARNs must 
-      contain region, whilst normal S3 Buckets do not.
+      contain region, whilst normal S3 Buckets do not. Cross AZ traffic costs $0.02/GB,
+      so try to avoid that, if you use S3 Express buckets (or run the Lambda in single subnet 
+      that matches the AZ of the S3 Express bucket)
+      TODO:
+       - S3 Express (Directory) Buckets are single AZ and thus if pushing data to them,
+         allow having AZ specific S3 Express Buckets.
+       - Make the Lambda find out its private IP address and give it a list of subnets along
+         with corresponding AZ. Lambda can then detect its AZ and choose the right S3 Express
+         bucket.
   dataTapOutputS3BucketArn:
     Type: String
     Description: >-
@@ -72,6 +80,8 @@ Parameters:
       memory makes it roughly twice faster at sending data to S3, thus having roughly the same cost,
       at least on small Lambda memory levels.
     Default: 128
+    MinValue: 128
+    MaxValue: 10240
   thresholdBytes:
     Type: Number
     Description: >-
