@@ -26,7 +26,7 @@ Parameters:
     Type: String
     Description: >-
       S3 Bucket prefix for the output data as strftime date time string.
-    Default: datataps/year=%Y/month=%m/day=%d/hour=%H/
+    Default: datataps/demoDataTap/year=%Y/month=%m/day=%d/hour=%H/
   bdTapTokenSecret:
     Type: String
     Description: >-
@@ -106,6 +106,12 @@ Resources:
       Content: extension.zip
       LayerName: dataTapsExtension
 
+  demoDataTapLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/datataps/${AWS::StackName}-demo-data-tap
+      RetentionInDays: 3
+
   demoDataTap:
     Type: AWS::Serverless::Function
     Properties:
@@ -122,6 +128,7 @@ Resources:
       LoggingConfig:
         ApplicationLogLevel: INFO
         LogFormat: JSON
+        LogGroup: !Ref demoDataTapLogGroup
         SystemLogLevel: INFO
       Environment:
         Variables:
@@ -136,6 +143,7 @@ Resources:
           BD_TAP_TOKEN_SECRET: !Ref bdTapTokenSecret
           S3_BUCKET: !Ref dataTapOutputS3Bucket
           S3_STRFTIME_PREFIX: !Ref dataTapOutputS3BucketSrftimePrefix
+          # S3_ENDPOINT: !Sub s3.${AWS::Region}.amazonaws.com
           AUTHORIZED_USERS: !Ref ownerBoilinDataEmail
           RESOURCE_OWNER_EMAIL: !Ref ownerBoilinDataEmail
           RESOURCE_OWNER_USERNAME: !Ref ownerBoilinDataEmail
@@ -170,8 +178,7 @@ Resources:
                 - '*'
               Effect: Allow
             - Action:
-                - s3:Get*
-                - s3:Put*
+                - s3:*
               Resource:
                 - !Ref dataTapOutputS3BucketArn
                 - !Sub ${dataTapOutputS3BucketArn}*
@@ -190,14 +197,14 @@ Resources:
 
 Outputs:
   dataTapURL:
+    Value: !GetAtt demoDataTapUrl.FunctionUrl
     Description: >-
       The AWS Lambda Function URL for the demoDataTap. You can send your data into this URL.
       As an example to send data.json with curl:
-        export TAP_URL="..."
-        export TAP_TOKEN="..."
-        curl --no-keepalive -H "Connection: close" \
-              -H "Content-Type:application/x-ndjson" \
-              -H "x-bd-authorization: ${TAP_TOKEN}" \
-              --data-binary @data.json \
-              ${TAP_URL}
-    Value: !GetAtt demoDataTapUrl.FunctionUrl
+
+      export TAP_URL="<theOutputValueFromBelow>"
+
+      export TAP_TOKEN=`bdcli account tap-client-token --disable-spinner | jq -r .bdTapToken`
+
+      curl --no-keepalive -H "Connection: close" -H "Content-Type:application/x-ndjson" -H "x-bd-authorization: ${TAP_TOKEN}" --data-binary @../data.json ${TAP_URL}
+          
