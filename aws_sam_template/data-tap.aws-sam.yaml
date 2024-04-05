@@ -1,27 +1,26 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Transform: AWS::Serverless-2016-10-31
+Transform:
+  - AWS::Serverless-2016-10-31
+  - AWS::LanguageExtensions
 Description: Data Tap template (BoilingData)
 
 Parameters:
-  dataTapOutputS3Bucket:
-    Type: String
-    Description: >-
-      The Data Taps output S3 Bucket name, not the ARN. The S3 Express Bucket ARNs must 
-      contain region, whilst normal S3 Buckets do not. Cross AZ traffic costs $0.02/GB,
-      so try to avoid that, if you use S3 Express buckets (or run the Lambda in single subnet 
-      that matches the AZ of the S3 Express bucket)
-      TODO:
-       - S3 Express (Directory) Buckets are single AZ and thus if pushing data to them,
-         allow having AZ specific S3 Express Buckets.
-       - Make the Lambda find out its private IP address and give it a list of subnets along
-         with corresponding AZ. Lambda can then detect its AZ and choose the right S3 Express
-         bucket.
   dataTapOutputS3BucketArn:
     Type: String
     Description: >-
-      ARN of the output S3 Bucket. Data Tap will output data onto this S3 (Express) Bucket. 
-      Remember to create S3 VPC gateway for both s3 and s3express, otherwise traffic flows 
-      through AWS public S3 API endpoint!
+      The Data Taps output S3 Bucket ARN. The S3 Express Bucket ARNs must contain region,
+      whilst normal S3 Buckets do not. Cross AZ traffic costs $0.02/GB, so try to avoid that,
+      if you use S3 Express buckets (or run the Lambda in single subnet that matches the AZ
+      of the S3 Express bucket).
+
+      NOTE: If you deploy to VPC, remember to create S3 VPC gateway for both s3 and s3express,
+            otherwise traffic flows through AWS public S3 API endpoint.
+      TODO:
+       - S3 Express (Directory) Buckets are single AZ and thus if pushing data to them,
+         allow having AZ specific S3 Express Buckets
+       - Make the Lambda find out its private IP address and give it a list of subnets along
+         with corresponding AZ. Lambda can then detect its AZ and choose the right S3 Express
+         bucket
   dataTapOutputS3BucketStrftimePrefix:
     Type: String
     Description: >-
@@ -141,7 +140,11 @@ Resources:
             FORMAT 'Parquet', COMPRESSION 'ZSTD' )
           TAP_NAME: demoDataTap
           BD_TAP_TOKEN_SECRET: !Ref bdTapTokenSecret
-          S3_BUCKET: !Ref dataTapOutputS3Bucket
+          S3_BUCKET: !Select
+            - 5
+            - !Split
+              - ':'
+              - !Ref dataTapOutputS3BucketArn
           S3_STRFTIME_PREFIX: !Ref dataTapOutputS3BucketStrftimePrefix
           # S3_ENDPOINT: !Sub s3.${AWS::Region}.amazonaws.com
           AUTHORIZED_USERS: !Ref ownerBoilinDataEmail
