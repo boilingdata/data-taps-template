@@ -22,7 +22,7 @@ Parameters:
       ARN of the output S3 Bucket. Data Tap will output data onto this S3 (Express) Bucket. 
       Remember to create S3 VPC gateway for both s3 and s3express, otherwise traffic flows 
       through AWS public S3 API endpoint!
-  dataTapOutputS3BucketSrftimePrefix:
+  dataTapOutputS3BucketStrftimePrefix:
     Type: String
     Description: >-
       S3 Bucket prefix for the output data as strftime date time string.
@@ -81,22 +81,22 @@ Parameters:
       Data Taps will flush/sync data to S3 once a threshold is reached (e.g. data volume or time passed 
       since last sync)
     Default: 60000
-  sgId:
-    Type: String
-    Description: >-
-      Security group for the AWS Lambda in the VPC.
-  subnet1:
-    Type: String
-    Description: >-
-      Subnets for the Data Tap Lambda. For HA, use a subnet per AZ within the same AZ.
-  subnet2:
-    Type: String
-    Description: >-
-      Subnets for the Data Tap Lambda. For HA, use a subnet per AZ within the same AZ.
-  subnet3:
-    Type: String
-    Description: >-
-      Subnets for the Data Tap Lambda. For HA, use a subnet per AZ within the same AZ.
+  # sgId:
+  #   Type: String
+  #   Description: >-
+  #     Security group for the AWS Lambda in the VPC.
+  # subnet1:
+  #   Type: String
+  #   Description: >-
+  #     Subnets for the Data Tap Lambda. For HA, use a subnet per AZ within the same AZ.
+  # subnet2:
+  #   Type: String
+  #   Description: >-
+  #     Subnets for the Data Tap Lambda. For HA, use a subnet per AZ within the same AZ.
+  # subnet3:
+  #   Type: String
+  #   Description: >-
+  #     Subnets for the Data Tap Lambda. For HA, use a subnet per AZ within the same AZ.
   
 
 Resources:
@@ -142,7 +142,7 @@ Resources:
           TAP_NAME: demoDataTap
           BD_TAP_TOKEN_SECRET: !Ref bdTapTokenSecret
           S3_BUCKET: !Ref dataTapOutputS3Bucket
-          S3_STRFTIME_PREFIX: !Ref dataTapOutputS3BucketSrftimePrefix
+          S3_STRFTIME_PREFIX: !Ref dataTapOutputS3BucketStrftimePrefix
           # S3_ENDPOINT: !Sub s3.${AWS::Region}.amazonaws.com
           AUTHORIZED_USERS: !Ref ownerBoilinDataEmail
           RESOURCE_OWNER_EMAIL: !Ref ownerBoilinDataEmail
@@ -194,14 +194,14 @@ Resources:
                 - !Sub ${dataTapOutputS3BucketArn}*
               Effect: Allow
       ReservedConcurrentExecutions: !Ref reservedConcurrency
-      VpcConfig:
-        SecurityGroupIds:
-          - !Ref sgId
-        SubnetIds:
-          - !Ref subnet1
-          - !Ref subnet2
-          - !Ref subnet3
-        Ipv6AllowedForDualStack: false
+      # VpcConfig:
+      #   SecurityGroupIds:
+      #     - !Ref sgId
+      #   SubnetIds:
+      #     - !Ref subnet1
+      #     - !Ref subnet2
+      #     - !Ref subnet3
+      #   Ipv6AllowedForDualStack: false
       RuntimeManagementConfig:
         UpdateRuntimeOn: Auto
 
