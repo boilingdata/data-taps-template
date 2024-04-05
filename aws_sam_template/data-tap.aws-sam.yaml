@@ -158,9 +158,13 @@ Resources:
         InvokeMode: BUFFERED
         Cors:
           AllowCredentials: true
+          AllowHeaders:
+            - '*'
           AllowMethods:
             - POST
           AllowOrigins:
+            - '*'
+          ExposeHeaders:
             - '*'
       Policies:
         - Statement:
