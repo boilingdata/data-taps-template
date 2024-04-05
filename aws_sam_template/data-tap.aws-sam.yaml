@@ -156,6 +156,12 @@ Resources:
       FunctionUrlConfig:
         AuthType: NONE
         InvokeMode: BUFFERED
+        Cors:
+          AllowCredentials: true
+          AllowMethods:
+            - POST
+          AllowOrigins:
+            - '*'
       Policies:
         - Statement:
             - Action:
