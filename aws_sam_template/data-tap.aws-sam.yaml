@@ -115,7 +115,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       PackageType: Zip
-      CodeUri: data-tap.zip
+      CodeUri: bdtap.zip
       MemorySize: !Ref memorySize
       Timeout: 5
       Handler: bdtap
