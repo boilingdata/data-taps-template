@@ -1,6 +1,6 @@
 # Data Taps
 
-**NOTE**: Instead of using bdcli, you can deploy Data Tap with AWS SAM template on [aws_sam_template/](aws_sam_template/README.md).
+**NOTE**: Instead of using bdcli, you can deploy Data Tap into your own AWS Account with AWS SAM template on [aws_sam_template/](aws_sam_template/README.md).
 
 ## Tailor made C++ runtime, bootstrap, handler, and extension
 
