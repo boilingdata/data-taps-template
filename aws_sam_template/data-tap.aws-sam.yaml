@@ -19,12 +19,10 @@ Parameters:
       NOTE: If you deploy to VPC, remember that AWS Lambda requires ENI which incurs costs.
             In practice it can double your Data Tap costs.
 
-      TODO:
-       - S3 Express (Directory) Buckets are single AZ and thus if pushing data to them,
-         allow having AZ specific S3 Express Buckets
-       - Make the Lambda find out its private IP address and give it a list of subnets along
-         with corresponding AZ. Lambda can then detect its AZ and choose the right S3 Express
-         bucket
+      NOTE: A non-VPC AWS Lambda does not know in which AZ it resides and thus with S3 Directory
+            Buckets, it potentially incurs cross-AZ traffic in case the bucket and the Lambda are
+            in different AZs.
+
   dataTapOutputS3BucketStrftimePrefix:
     Type: String
     Description: >-
